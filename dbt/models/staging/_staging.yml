@@ -1,0 +1,14 @@
+version: 2
+models:
+- name: stg_bronze__demand
+  columns:
+  - name: settlement_ts
+    data_tests:
+    - unique
+    - not_null
+- name: stg_bronze__weather
+  columns:
+  - name: weather_date
+    data_tests:
+    - unique
+    - not_null

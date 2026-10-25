@@ -1,0 +1,8 @@
+# Kept in-repo so CI and reviewers can run it. Secrets come from environment variables only.
+load_forecasting_ops:
+  target: duckdb
+  outputs:
+    duckdb:
+      type: duckdb
+      path: "{{ env_var('DUCKDB_PATH', '../warehouse/load_forecasting_ops.duckdb') }}"
+      threads: 4

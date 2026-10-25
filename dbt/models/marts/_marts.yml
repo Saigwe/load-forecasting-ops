@@ -1,0 +1,10 @@
+version: 2
+models:
+  - name: rpt_daily_demand
+    columns:
+      - name: demand_date
+        data_tests: [unique, not_null]
+  - name: rpt_naive_forecast_accuracy
+    columns:
+      - name: forecast_month
+        data_tests: [unique, not_null]
