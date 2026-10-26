@@ -52,3 +52,17 @@ def test_daily_run_left_a_report_and_a_green_log():
     assert runs[-1]["ok"]
     report = json.loads(sorted((STATE / "reports").glob("report_*.json"))[-1].read_text())
     assert report["status"] in ("GREEN", "AMBER") and report["tomorrow"]
+
+
+def test_state_export_merges_with_an_existing_log(tmp_path):
+    """The second daily run merges into a log written by the first: same rows, no duplicates, no type errors."""
+    import shutil
+    import subprocess
+
+    db = tmp_path / "copy.duckdb"
+    shutil.copy(DB, db)
+    cmd = [sys.executable, str(ROOT / "ops" / "state.py"), "export", "--db", str(db), "--state", str(tmp_path / "s")]
+    for _ in range(3):
+        subprocess.run(cmd, check=True, capture_output=True)
+    log = pd.read_csv(tmp_path / "s" / "live_forecasts.csv")
+    assert len(log) > 0 and not log.duplicated(["model", "target_date", "settlement_period"]).any()

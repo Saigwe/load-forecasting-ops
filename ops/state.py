@@ -49,9 +49,10 @@ def main() -> None:
     else:
         df = con.execute("select * from bronze.model_forecasts where run_id like 'live-%'").df()
         if live_csv.exists():
-            old = pd.read_csv(live_csv, parse_dates=["issued_at"])
-            old["target_date"] = pd.to_datetime(old.target_date).dt.date
-            df = pd.concat([old, df], ignore_index=True)
+            df = pd.concat([pd.read_csv(live_csv), df], ignore_index=True)
+        # one type per column before merging: the CSV gives text, DuckDB gives dates and timestamps
+        df["target_date"] = pd.to_datetime(df.target_date).dt.strftime("%Y-%m-%d")
+        df["issued_at"] = pd.to_datetime(df.issued_at)
         df = df.sort_values("issued_at").drop_duplicates(KEY, keep="last").sort_values(KEY)
         args.state.mkdir(parents=True, exist_ok=True)
         df.to_csv(live_csv, index=False)

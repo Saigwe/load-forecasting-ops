@@ -83,7 +83,7 @@ def main() -> None:
         if model == "lgbm_neso_residual" and target_rows.neso_forecast_mw.isna().any():
             report[model] = "skipped: NESO's half-hourly forecast for the target day is not available"
             continue
-        booster = fit(features[features.settlement_date < pd.Timestamp(target) - pd.Timedelta(days=1)], model)
+        booster = fit(features[features.settlement_date < pd.Timestamp(target) - pd.Timedelta(days=1)], model)  # known by D-1
         fc = np.asarray(predict(booster, target_rows, model), dtype=float).round(0)
         out.append(pd.DataFrame({"model": model, "target_date": target, "settlement_period": target_rows.settlement_period,
                                  "forecast_mw": fc, "issued_at": issued, "run_id": f"live-{target}"}))
