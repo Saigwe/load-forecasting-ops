@@ -1,10 +1,45 @@
 version: 2
+
 models:
+  - name: fct_demand_halfhour
+    data_tests:
+      - unique_combination:
+          arguments:
+            columns: [settlement_date, settlement_period]
   - name: rpt_daily_demand
     columns:
-      - name: demand_date
+      - name: settlement_date
         data_tests: [unique, not_null]
-  - name: rpt_naive_forecast_accuracy
-    columns:
-      - name: forecast_month
-        data_tests: [unique, not_null]
+  - name: fct_forecast_errors
+    data_tests:
+      - unique_combination:
+          arguments:
+            columns: [method, run_type, settlement_date, settlement_period]
+  - name: rpt_forecast_accuracy_monthly
+    data_tests:
+      - unique_combination:
+          arguments:
+            columns: [method, month]
+  - name: rpt_forecast_accuracy_daily
+    data_tests:
+      - unique_combination:
+          arguments:
+            columns: [method, settlement_date]
+
+unit_tests:
+  - name: settlement_periods_follow_the_clock_on_change_days
+    description: On the autumn clock change, period 3 and period 5 are both 01:00 local but an hour apart in UTC.
+    model: stg_demand
+    given:
+      - input: source('bronze', 'demand')
+        rows:
+          - {settlement_date: 2025-10-26, settlement_period: 1, nd: 20000, tsd: 0, embedded_wind_generation: 0, embedded_solar_generation: 0}
+          - {settlement_date: 2025-10-26, settlement_period: 3, nd: 20000, tsd: 0, embedded_wind_generation: 0, embedded_solar_generation: 0}
+          - {settlement_date: 2025-10-26, settlement_period: 5, nd: 20000, tsd: 0, embedded_wind_generation: 0, embedded_solar_generation: 0}
+          - {settlement_date: 2025-07-01, settlement_period: 1, nd: 20000, tsd: 0, embedded_wind_generation: 0, embedded_solar_generation: 0}
+    expect:
+      rows:
+        - {settlement_date: 2025-10-26, settlement_period: 1, period_start_utc: "2025-10-25 23:00:00"}
+        - {settlement_date: 2025-10-26, settlement_period: 3, period_start_utc: "2025-10-26 00:00:00"}
+        - {settlement_date: 2025-10-26, settlement_period: 5, period_start_utc: "2025-10-26 01:00:00"}
+        - {settlement_date: 2025-07-01, settlement_period: 1, period_start_utc: "2025-06-30 23:00:00"}

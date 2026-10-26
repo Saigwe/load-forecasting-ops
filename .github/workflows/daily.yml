@@ -1,0 +1,57 @@
+name: daily
+
+# The morning DAG on real data: incremental load (a fresh runner backfills), dbt, tomorrow's forecasts, the morning
+# report (posted to Slack when the SLACK_WEBHOOK_URL secret is set), and the forecast log saved to the ops-log branch
+# so accuracy can be tracked over time. Runs after NESO publishes its day-ahead forecast at 09:45 UK time.
+# To pause it: Actions -> daily -> "..." -> Disable workflow.
+on:
+  schedule:
+    - cron: "15 10 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["ops/**", "forecasting/**", "ingestion/**", ".github/workflows/daily.yml"]
+
+concurrency:
+  group: daily
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Check out the ops-log branch (created on the first run)
+        run: |
+          git config user.name "load-forecasting-ops bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin ops-log; then
+            git worktree add ops-log origin/ops-log -B ops-log
+          else
+            git worktree add --orphan -b ops-log ops-log
+          fi
+      - name: Daily DAG
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: python ops/run_daily.py --db warehouse/load.duckdb --state ops-log --backfill
+      - name: Save the forecast log, report and run log
+        if: always()
+        run: |
+          cd ops-log
+          git add -A
+          git diff --cached --quiet || git commit -m "Daily run $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push origin ops-log
+      - name: Morning report
+        if: always()
+        run: cat ops-log/reports/$(ls ops-log/reports | grep '\.md$' | sort | tail -1) >> "$GITHUB_STEP_SUMMARY" || true

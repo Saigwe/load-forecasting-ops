@@ -8,3 +8,4 @@ dbt/logs/
 dbt/dbt_packages/
 .user.yml
 .env
+ops-log/

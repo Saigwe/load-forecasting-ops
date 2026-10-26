@@ -1,10 +1,12 @@
+-- Daily view: energy, peak and when it happened, minimum, and the day's average temperature.
 select
-    cast(d.settlement_ts as date)   as demand_date,
-    count(*)                        as settlement_periods,
-    max(d.demand_mw)                as peak_mw,
-    avg(d.demand_mw)                as avg_mw,
-    min(d.demand_mw)                as min_mw,
-    max(w.temp_c)                   as temp_c
-from {{ ref('stg_bronze__demand') }} d
-left join {{ ref('stg_bronze__weather') }} w on w.weather_date = cast(d.settlement_ts as date)
+    settlement_date,
+    count(*)                                                            as settlement_periods,
+    sum(nd_mw) * 0.5 / 1000                                             as energy_gwh,
+    max(nd_mw)                                                          as peak_mw,
+    arg_max(settlement_period, nd_mw)                                   as peak_period,
+    min(nd_mw)                                                          as min_mw,
+    avg(temp_actual_c)                                                  as avg_temp_c,
+    any_value(is_bank_holiday)                                          as is_bank_holiday
+from {{ ref('fct_demand_halfhour') }}
 group by 1

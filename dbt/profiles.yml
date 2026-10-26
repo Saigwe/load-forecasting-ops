@@ -4,5 +4,7 @@ load_forecasting_ops:
   outputs:
     duckdb:
       type: duckdb
-      path: "{{ env_var('DUCKDB_PATH', '../warehouse/load_forecasting_ops.duckdb') }}"
+      path: "{{ env_var('DUCKDB_PATH', '../warehouse/load.duckdb') }}"
+      settings:
+        TimeZone: UTC
       threads: 4

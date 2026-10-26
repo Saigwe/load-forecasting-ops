@@ -1,14 +1,16 @@
 version: 2
 models:
-- name: stg_bronze__demand
-  columns:
-  - name: settlement_ts
+  - name: stg_demand
     data_tests:
-    - unique
-    - not_null
-- name: stg_bronze__weather
-  columns:
-  - name: weather_date
-    data_tests:
-    - unique
-    - not_null
+      - unique_combination:
+          arguments:
+            columns: [settlement_date, settlement_period]
+    columns:
+      - name: nd_mw
+        data_tests: [not_null]
+      - name: period_start_utc
+        data_tests: [unique, not_null]
+  - name: stg_weather
+    columns:
+      - name: hour_utc
+        data_tests: [unique, not_null]

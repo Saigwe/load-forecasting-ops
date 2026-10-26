@@ -1,7 +1,15 @@
 version: 2
 sources:
 - name: bronze
-  description: Raw tables, loaded by the fixture generator (CI) or the real-data loaders.
+  description: Loaded by ingestion/load.py (NESO, Open-Meteo, GOV.UK) and forecasting/*.py (our forecasts).
   tables:
   - name: demand
-  - name: weather
+    description: NESO historic half-hourly demand (outturn only).
+  - name: neso_forecast
+    description: NESO's day-ahead demand forecast per half hour, published 09:45 the day before, with outturn.
+  - name: weather_actual
+  - name: weather_forecast
+    description: Open-Meteo day-1 forecasts (as issued the day before).
+  - name: bank_holidays
+  - name: model_forecasts
+    description: Our day-ahead forecasts (backtest and live), one row per model, target date and settlement period.
