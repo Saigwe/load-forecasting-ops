@@ -1,0 +1,41 @@
+{
+ "date": "2026-10-26",
+ "status": "GREEN",
+ "stale": {},
+ "yesterday": {
+  "neso_day_ahead": {
+   "mape": 0.018921195752762913,
+   "half_hours": 50
+  },
+  "lgbm_neso_residual": {
+   "mape": 0.021799068001528255,
+   "half_hours": 48
+  },
+  "lgbm_day_ahead": {
+   "mape": 0.06296145837286292,
+   "half_hours": 48
+  },
+  "naive_last_week": {
+   "mape": 0.07153432974813696,
+   "half_hours": 48
+  }
+ },
+ "tomorrow": {
+  "lgbm_day_ahead": {
+   "peak_mw": 36441.0,
+   "peak_period": 38,
+   "energy_gwh": 660.8895
+  },
+  "lgbm_neso_residual": {
+   "peak_mw": 35293.0,
+   "peak_period": 36,
+   "energy_gwh": 615.319
+  }
+ },
+ "rolling_mape_30d": {
+  "neso_day_ahead": 0.02858740424918697,
+  "lgbm_day_ahead": 0.05886752070303785,
+  "naive_last_week": 0.08157403298470477,
+  "lgbm_neso_residual": 0.02754584020886642
+ }
+}
