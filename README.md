@@ -130,7 +130,7 @@ make fixture-all     # synthetic bronze tables, offline: dbt, backtest, a daily 
 - [x] Automated morning report (Slack when a webhook secret is set) on a daily schedule
 - [ ] The DAG running green for 30 days (it started 26 October 2026; check the badge and the `ops-log` branch)
 - [ ] Probabilistic forecasts (quantiles) and peak-time accuracy
-- [ ] 3-minute Loom walkthrough
+- [ ] 3-minute Loom walkthrough ([script ready](docs/walkthrough.md))
 
 ## Interview topics this project prepares
 - Incremental loading: watermarks, idempotent upserts, late revisions, backfills
