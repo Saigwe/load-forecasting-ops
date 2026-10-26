@@ -16,7 +16,7 @@
    "half_hours": 48
   },
   "naive_last_week": {
-   "mape": 0.07153432974813696,
+   "mape": 0.07153432974813698,
    "half_hours": 48
   }
  },
@@ -33,9 +33,9 @@
   }
  },
  "rolling_mape_30d": {
-  "neso_day_ahead": 0.02858740424918697,
-  "lgbm_day_ahead": 0.05886752070303785,
+  "lgbm_neso_residual": 0.02754584020886642,
   "naive_last_week": 0.08157403298470477,
-  "lgbm_neso_residual": 0.02754584020886642
+  "lgbm_day_ahead": 0.05886752070303785,
+  "neso_day_ahead": 0.02858740424918697
  }
 }
