@@ -51,6 +51,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--db", default="warehouse/load.duckdb")
     ap.add_argument("--start", default="2024-04-01")
+    ap.add_argument("--summary", type=Path, default=Path("results/backtest_summary.json"))
     args = ap.parse_args()
     con = duckdb.connect(args.db)
     d = add_features(frame(con, recent_outturn=True))  # outturn up to this morning, not just the lagging file
@@ -77,8 +78,8 @@ def main() -> None:
     con.execute("delete from bronze.model_forecasts where run_id like 'backtest-%'")
     con.execute("insert into bronze.model_forecasts by name select * from out")
     summary.update({"months": len(months), "forecasts": len(out), "seconds": round(time.time() - t0, 1)})
-    Path("results").mkdir(exist_ok=True)
-    Path("results/backtest_summary.json").write_text(json.dumps(summary, indent=1))
+    args.summary.parent.mkdir(parents=True, exist_ok=True)
+    args.summary.write_text(json.dumps(summary, indent=1))
     print(json.dumps(summary))
 
 

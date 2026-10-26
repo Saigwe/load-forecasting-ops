@@ -1,29 +1,29 @@
 {
  "lgbm_day_ahead": {
   "top_features": {
-   "nd_lag7": 0.411,
-   "nd_lag14": 0.116,
-   "settlement_period": 0.091,
-   "heating_degrees": 0.071,
-   "temp_c": 0.065,
-   "nd_lag2": 0.045,
-   "solar_wm2": 0.039,
-   "day_of_week": 0.035
+   "nd_lag7": 0.332,
+   "nd_lag14": 0.081,
+   "nd_lag2": 0.078,
+   "settlement_period": 0.065,
+   "doy_sin": 0.052,
+   "solar_wm2": 0.044,
+   "doy_cos": 0.043,
+   "d1_morning_mw": 0.043
   }
  },
  "lgbm_neso_residual": {
   "top_features": {
-   "neso_forecast_mw": 0.138,
-   "neso_vs_lag7": 0.135,
-   "temp_c": 0.087,
-   "settlement_period": 0.085,
-   "nd_lag7": 0.074,
-   "nd_lag14": 0.063,
-   "heating_degrees": 0.062,
-   "nd_lag2": 0.058
+   "trend_days": 0.094,
+   "doy_sin": 0.092,
+   "d1_morning_mw": 0.087,
+   "morning_change": 0.086,
+   "doy_cos": 0.084,
+   "d2_morning_mw": 0.082,
+   "wind_kmh": 0.067,
+   "neso_vs_lag7": 0.056
   }
  },
- "months": 4,
- "forecasts": 11712,
- "seconds": 96.6
+ "months": 31,
+ "forecasts": 90062,
+ "seconds": 799.4
 }

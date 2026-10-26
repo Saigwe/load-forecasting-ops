@@ -30,7 +30,7 @@ test:
 fixture-all:   ## synthetic bronze tables, offline: dbt, backtest, one daily run, tests (CI)
 	$(PY) tests/fixtures/make_fixture.py --db warehouse/fixture.duckdb
 	$(MAKE) dbt DB=warehouse/fixture.duckdb
-	$(PY) forecasting/backtest.py --db warehouse/fixture.duckdb --start 2024-09-01
+	$(PY) forecasting/backtest.py --db warehouse/fixture.duckdb --start 2024-09-01 --summary data/fixture/backtest_summary.json
 	$(PY) ops/run_daily.py --db warehouse/fixture.duckdb --state data/fixture/ops-log --offline --target 2025-01-01
 	$(MAKE) test DB=warehouse/fixture.duckdb STATE=data/fixture/ops-log
 
