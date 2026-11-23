@@ -17,3 +17,5 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Fixture pipeline (dbt -> walk-forward backtest -> one daily DAG run, offline -> tests)
         run: make fixture-all
+      - name: README charts render from the results
+        run: python charts/make_charts.py --db warehouse/fixture.duckdb --out "$RUNNER_TEMP/charts"

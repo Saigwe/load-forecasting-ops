@@ -4,7 +4,7 @@ STATE ?= ops-log
 DBT_BIN ?= dbt
 DBT = cd dbt && DUCKDB_PATH=../$(DB) $(DBT_BIN)
 
-.PHONY: all backfill incremental dbt backtest daily test fixture-all clean
+.PHONY: all backfill incremental dbt backtest daily test fixture-all clean charts
 
 all: backfill dbt backtest daily   ## real data: five-year backfill, backtest, one daily run
 
@@ -36,3 +36,6 @@ fixture-all:   ## synthetic bronze tables, offline: dbt, backtest, one daily run
 
 clean:
 	rm -rf warehouse dbt/target dbt/logs data/fixture
+
+charts:                                            ## README charts -> docs/charts
+	$(PY) charts/make_charts.py

@@ -21,6 +21,13 @@ Project 19 of my portfolio plan. At a Nigerian electricity distribution company 
 | **Why it matters** | It's measured against the professional benchmark, NESO's own day-ahead forecast, not just a naive baseline. Starting from NESO's forecast and learning its systematic errors beats it in 23 of 31 months. |
 | **Proof** | [Numbers](#numbers), from the real backfill and backtest; the daily run's log and reports are on the [`ops-log` branch](https://github.com/Saigwe/load-forecasting-ops/tree/ops-log). |
 
+## Charts
+Rendered from this repo's own results by `charts/make_charts.py` (`make charts`); CI re-renders them on every push.
+
+![Day-ahead MAPE by month and method](docs/charts/forecast_accuracy_monthly.png)
+
+![Weekly peak GB national demand](docs/charts/weekly_peak_demand.png)
+
 ## Architecture
 ```mermaid
 flowchart LR
